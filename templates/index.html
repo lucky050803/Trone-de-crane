@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trône de Cranes</title>
+    <style>
+        /* Style de base */
+
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 3em;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            color: #FFD700;
+        }
+
+        /* Centrage du contenu */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Style du bouton */
+        button {
+            background-color: #000000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Style du tableau */
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-top: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #000000;
+            color: white;
+        }
+
+        td {
+            background-color: #000000;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #000000;
+        }
+
+        tr:hover td {
+            background-color: #808080;
+        }
+    </style>
+</head>
+<body>
+    <video class="video-bg" src="static/bg.mp4" autoplay loop muted></video>
+    <div class="container">
+        <h1>Trône de Cranes</h1>
+        
+        <!-- Bouton pour accéder au formulaire d'ajout -->
+        <a href="/process_data">
+            <button>Ajouter une partie</button>
+        </a>
+
+        <a href="/stat">
+            <button>Statistiques</button>
+        </a>
+        
+        <!-- Tableau des parties -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Joueur 1</th>
+                    <th>Joueur 2</th>
+                    <th>Joueur 3</th>
+                    <th>Joueur 4</th>
+                    <th>Vainqueur</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for partie in parties %}
+                <tr>
+                    <td>{{ partie['date'] }}</td>
+                    <td>{{ partie['joueur1_nom'] }}</td>
+                    <td>{{ partie['joueur2_nom'] }}</td>
+                    <td>{{ partie['joueur3_nom'] }}</td>
+                    <td>{{ partie['joueur4_nom'] }}</td>
+                    <td>{{ partie['vainqueur'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
