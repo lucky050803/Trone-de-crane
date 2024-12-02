@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistiques des Parties</title>
+    <title>Stats</title>
     <style>
 
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -89,12 +89,12 @@
 </head>
 <body>
     <video class="video-bg" src="static/bg.mp4" autoplay loop muted></video>
-    <h1>Statistiques des Parties</h1>
+    <h1>Stats</h1>
 
     <div class="stat-container">
         <!-- Pourcentage de victoires par joueur -->
         <div class="stat-box">
-            <h2>Pourcentage de Victoire par Joueur</h2>
+            <h2>% of victories per player</h2>
             <ul>
                 {% for joueur, pourcentage in pourcentage_victoires_par_joueur.items() %}
                     <li>{{ joueur }} : {{ pourcentage }}%</li>
@@ -104,13 +104,13 @@
 
         <!-- Bande ayant le plus gagné -->
         <div class="stat-box">
-            <h2>Bande avec le Plus de Victoires</h2>
+            <h2>Band with the most victories</h2>
             <p>{{ bande_ayant_le_plus_gagne }}</p>
         </div>
 
         <!-- Nombre total de parties jouées -->
         <div class="stat-box">
-            <h2>Nombre Total de Parties</h2>
+            <h2>Total number of games</h2>
             <p>{{ total_parties }}</p>
         </div>
     </div>
@@ -119,10 +119,10 @@
     <table>
         <thead>
             <tr>
-                <th>Joueur</th>
-                <th>Bande</th>
-                <th>Nombre de Victoires</th>
-                <th>Pourcentage de Victoire</th>
+                <th>Player</th>
+                <th>Band</th>
+                <th>Number of victories</th>
+                <th>% of victories</th>
             </tr>
         </thead>
         <tbody>

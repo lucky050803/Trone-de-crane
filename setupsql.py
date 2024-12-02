@@ -21,12 +21,24 @@ def create_table():
             joueur2_points INTEGER,
             joueur3_points INTEGER,
             joueur4_points INTEGER,
-            vainqueur INTEGER
+            vainqueur TEXT
         )
     ''')
     
+    # Création de la table "cartes"
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS cartes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nom TEXT NOT NULL,
+            type TEXT NOT NULL CHECK(type IN ('objectif', 'stratagème', 'équipement', 'sort')),
+            saison TEXT NOT NULL CHECK(saison IN ('Shadepsire', 'Nightvault', 'Beastgrave', 'Direchasm', 'Starter set 2021', 'Harrowdeep', 'Nethermaze', 'Gnarlwood', 'Wyrdhollow', 'Starter set 2023', 'Deathgorge', 'Wintermaw')),
+            alliance TEXT NOT NULL CHECK(alliance IN ('mort', 'chaos', 'destruction', 'ordre')),
+            numero_serie TEXT NOT NULL UNIQUE
+        )
+    ''')
+
     conn.commit()
     conn.close()
 
-# Appelez cette fonction une fois pour créer la table
+# Appelez cette fonction une fois pour créer les tables
 create_table()

@@ -1,6 +1,9 @@
 from flask import Flask, request, render_template, redirect
 import sqlite3
 from datetime import datetime
+
+
+
 def get_db_connection():
     conn = sqlite3.connect('jeu.db')  # Assurez-vous que le fichier DB existe
     conn.row_factory = sqlite3.Row  # Pour accéder aux colonnes par nom
@@ -168,6 +171,36 @@ def stats():
         bande_ayant_le_plus_gagne=bande_ayant_le_plus_gagne,
         statistiques_joueurs=statistiques_joueurs
     )
+
+@app.route('/ajouter_carte', methods=['GET', 'POST'])
+def ajouter_carte():
+    if request.method == 'POST':
+        nom = request.form['nom']
+        type_carte = request.form['type']
+        saison = request.form['saison']
+        alliance = request.form['alliance']
+        numero_serie = request.form['numero_serie']
+
+        conn = get_db_connection()
+        conn.execute('INSERT INTO cartes (nom, type, saison, alliance, numero_serie) VALUES (?, ?, ?, ?, ?)',
+                     (nom, type_carte, saison, alliance, numero_serie))
+        conn.commit()
+        conn.close()
+
+        return redirect('/collection')
+
+    return render_template('ajouter_carte.html')
+
+
+@app.route('/collection', methods=['GET'])
+def collection():
+    search = request.args.get('search', '')
+    conn = get_db_connection()
+    query = "SELECT * FROM cartes WHERE nom LIKE ? OR type LIKE ? OR saison LIKE ? OR alliance LIKE ?"
+    cartes = conn.execute(query, (f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%')).fetchall()
+    conn.close()
+
+    return render_template('collection.html', cartes=cartes)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
