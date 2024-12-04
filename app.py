@@ -180,10 +180,11 @@ def ajouter_carte():
         saison = request.form['saison']
         alliance = request.form['alliance']
         numero_serie = request.form['numero_serie']
+        disponibilite = request.form['disponibilite']
 
         conn = get_db_connection()
-        conn.execute('INSERT INTO cartes (nom, type, saison, alliance, numero_serie) VALUES (?, ?, ?, ?, ?)',
-                     (nom, type_carte, saison, alliance, numero_serie))
+        conn.execute('INSERT INTO cartes (nom, type, saison, alliance, numero_serie, disponibilite) VALUES (?, ?, ?, ?, ?, ?)',
+                     (nom, type_carte, saison, alliance, numero_serie, disponibilite))
         conn.commit()
         conn.close()
 
@@ -196,11 +197,32 @@ def ajouter_carte():
 def collection():
     search = request.args.get('search', '')
     conn = get_db_connection()
-    query = "SELECT * FROM cartes WHERE nom LIKE ? OR type LIKE ? OR saison LIKE ? OR alliance LIKE ?"
+    query = """
+        SELECT nom, type, saison, alliance, numero_serie, disponibilite
+        FROM cartes
+        WHERE nom LIKE ? OR type LIKE ? OR saison LIKE ? OR alliance LIKE ?
+    """
     cartes = conn.execute(query, (f'%{search}%', f'%{search}%', f'%{search}%', f'%{search}%')).fetchall()
     conn.close()
-
     return render_template('collection.html', cartes=cartes)
+
+@app.route('/modifier_disponibilite', methods=['POST'])
+def modifier_disponibilite():
+    carte_id = request.form['id']
+    saison = request.form['saison']
+    nouvelle_disponibilite = request.form['nouvelle_disponibilite']
+
+    conn = get_db_connection()
+    conn.execute('''
+        UPDATE cartes
+        SET disponibilite = ?
+        WHERE id = ? AND saison = ?
+    ''', (nouvelle_disponibilite, carte_id, saison))
+    conn.commit()
+    conn.close()
+
+    return redirect('/collection')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -33,12 +33,13 @@ def create_table():
             type TEXT NOT NULL CHECK(type IN ('objectif', 'stratagème', 'équipement', 'sort')),
             saison TEXT NOT NULL CHECK(saison IN ('Shadepsire', 'Nightvault', 'Beastgrave', 'Direchasm', 'Starter set 2021', 'Harrowdeep', 'Nethermaze', 'Gnarlwood', 'Wyrdhollow', 'Starter set 2023', 'Deathgorge', 'Wintermaw')),
             alliance TEXT NOT NULL CHECK(alliance IN ('mort', 'chaos', 'destruction', 'ordre')),
-            numero_serie TEXT NOT NULL UNIQUE
+            numero_serie TEXT NOT NULL UNIQUE,
+            disponibilite TEXT NOT NULL CHECK(disponibilite LIKE 'Deck:%' OR disponibilite IN ('dispo', 'non posséder'))
         )
     ''')
 
     conn.commit()
     conn.close()
 
-# Appelez cette fonction une fois pour créer les tables
+# Appelez cette fonction une fois pour créer ou mettre à jour les tables
 create_table()

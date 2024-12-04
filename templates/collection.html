@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card Binder</title>
+    <title>Collection de Cartes</title>
     <style>
         /* Importation de la police */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -13,7 +13,7 @@
             margin: 0;
             font-family: 'Montserrat', sans-serif;
             color: #FFD700; /* Jaune */
-            background: url('static/bg.jpg') no-repeat center center fixed;
+            background: url('static/background.jpg') no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -89,23 +89,40 @@
             background-color: #FF0000; /* Rouge au survol */
             color: #FFD700;
         }
+
+        .modify-btn {
+            background-color: #FFD700; /* Jaune */
+            color: #000000; /* Noir */
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .modify-btn:hover {
+            background-color: #FFCC00; /* Jaune clair au survol */
+        }
     </style>
 </head>
 <body>
-    <h1>Card Collection</h1>
+    <h1>Collection de Cartes</h1>
     <form method="GET" action="/collection">
         <input type="text" name="search" placeholder="Rechercher par nom, type, saison...">
-        <button type="submit">Filter</button>
+        <button type="submit">Filtrer</button>
     </form>
 
     <table>
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Nom</th>
                 <th>Type</th>
-                <th>Season</th>
+                <th>Saison</th>
                 <th>Alliance</th>
-                <th>Serial Number</th>
+                <th>Numéro de Série</th>
+                <th>Disponibilité</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -116,6 +133,28 @@
                 <td>{{ carte.saison }}</td>
                 <td>{{ carte.alliance }}</td>
                 <td>{{ carte.numero_serie }}</td>
+                <td>
+                    {% if carte.disponibilite.startswith('Deck') %}
+                        {{ carte.disponibilite }}
+                    {% elif carte.disponibilite == 'dispo' %}
+                        Disponible
+                    {% else %}
+                        Non Possédée
+                    {% endif %}
+                </td>
+                <td>
+                    <!-- Bouton pour modifier la disponibilité -->
+                    <form method="POST" action="/modifier_disponibilite">
+                        <input type="hidden" name="id" value="{{ carte.id }}">
+                        <input type="hidden" name="saison" value="{{ carte.saison }}">
+                        <select name="nouvelle_disponibilite" required>
+                            <option value="Deck">Deck</option>
+                            <option value="dispo">Disponible</option>
+                            <option value="non posséder">Non Possédée</option>
+                        </select>
+                        <button type="submit" class="modify-btn">Modifier</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
