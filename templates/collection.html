@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Collection de Cartes</title>
+    <title>Binder</title>
     <style>
         /* Importation de la police */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -104,10 +104,20 @@
         .modify-btn:hover {
             background-color: #FFCC00; /* Jaune clair au survol */
         }
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
     </style>
 </head>
 <body>
-    <h1>Collection de Cartes</h1>
+    <video class="video-bg" src="static/bg.mp4" autoplay loop muted></video>
+    <h1>Binder</h1>
     <form method="GET" action="/collection">
         <input type="text" name="search" placeholder="Rechercher par nom, type, saison...">
         <button type="submit">Filtrer</button>
@@ -127,13 +137,13 @@
         </thead>
         <tbody>
             {% for carte in cartes %}
-            <tr>
+            <tr id="carte-{{ carte.id }}-{{ carte.saison }}">
                 <td>{{ carte.nom }}</td>
                 <td>{{ carte.type }}</td>
                 <td>{{ carte.saison }}</td>
                 <td>{{ carte.alliance }}</td>
                 <td>{{ carte.numero_serie }}</td>
-                <td>
+                <td class="disponibilite">
                     {% if carte.disponibilite.startswith('Deck') %}
                         {{ carte.disponibilite }}
                     {% elif carte.disponibilite == 'dispo' %}
@@ -143,12 +153,10 @@
                     {% endif %}
                 </td>
                 <td>
-                    <!-- Bouton pour modifier la disponibilité -->
-                    <form method="POST" action="/modifier_disponibilite">
-                        <input type="hidden" name="id" value="{{ carte.id }}">
-                        <input type="hidden" name="saison" value="{{ carte.saison }}">
-                        <select name="nouvelle_disponibilite" required>
-                            <option value="Deck">Deck</option>
+                    <!-- Formulaire pour modifier la disponibilité -->
+                    <form onsubmit="modifierDisponibilite(event, {{ carte.id }}, '{{ carte.saison }}')" method="POST">
+                        <select name="nouvelle_disponibilite" id="nouvelle-dispo-{{ carte.id }}" required>
+                            <option value="Deck:Starter">Deck:Starter</option>
                             <option value="dispo">Disponible</option>
                             <option value="non posséder">Non Possédée</option>
                         </select>
@@ -159,5 +167,32 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <script>
+        async function modifierDisponibilite(event, id, saison) {
+            event.preventDefault();
+            
+            const nouvelleDispo = document.querySelector(`#nouvelle-dispo-${id}`).value;
+
+            // Envoi de la requête POST
+            const response = await fetch('/modifier_disponibilite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id, saison, nouvelle_disponibilite: nouvelleDispo })
+            });
+
+            if (response.ok) {
+                const updatedData = await response.json();
+                
+                // Mise à jour de l'élément dans le tableau
+                const disponibiliteCell = document.querySelector(`#carte-${id}-${saison} .disponibilite`);
+                disponibiliteCell.textContent = updatedData.nouvelle_disponibilite;
+            } else {
+                alert('Erreur lors de la mise à jour de la disponibilité.');
+            }
+        }
+    </script>
 </body>
 </html>

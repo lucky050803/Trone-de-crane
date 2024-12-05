@@ -193,7 +193,7 @@ def ajouter_carte():
     return render_template('ajouter_carte.html')
 
 
-@app.route('/collection', methods=['GET'])
+@app.route('/collection', methods=['GET', 'POST'])
 def collection():
     search = request.args.get('search', '')
     conn = get_db_connection()
@@ -206,11 +206,14 @@ def collection():
     conn.close()
     return render_template('collection.html', cartes=cartes)
 
+from flask import jsonify
+
 @app.route('/modifier_disponibilite', methods=['POST'])
 def modifier_disponibilite():
-    carte_id = request.form['id']
-    saison = request.form['saison']
-    nouvelle_disponibilite = request.form['nouvelle_disponibilite']
+    data = request.json
+    carte_id = data['id']
+    saison = data['saison']
+    nouvelle_disponibilite = data['nouvelle_disponibilite']
 
     conn = get_db_connection()
     conn.execute('''
@@ -221,7 +224,8 @@ def modifier_disponibilite():
     conn.commit()
     conn.close()
 
-    return redirect('/collection')
+    return jsonify({"id": carte_id, "saison": saison, "nouvelle_disponibilite": nouvelle_disponibilite})
+
 
 
 if __name__ == '__main__':

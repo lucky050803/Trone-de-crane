@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter une Carte</title>
+    <title>Add a card</title>
     <style>
         /* Importation de la police */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -66,9 +66,19 @@
         button:hover {
             background-color: #FF4500; /* Rouge plus clair au survol */
         }
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
     </style>
 </head>
 <body>
+    <video class="video-bg" src="static/bg.mp4" autoplay loop muted></video>
     <h1>Add a card</h1>
     <form action="/ajouter_carte" method="POST">
         <label for="nom">Name :</label>
