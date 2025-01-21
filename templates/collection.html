@@ -154,7 +154,7 @@
                 </td>
                 <td>
                     <!-- Formulaire pour modifier la disponibilité -->
-                    <form onsubmit="modifierDisponibilite(event, {{ carte.id }}, '{{ carte.saison }}')" method="POST">
+                    <form onsubmit="modifierDisponibilite(event, '{{ carte.id }}', '{{ carte.saison }}')" method="POST">
                         <select name="nouvelle_disponibilite" id="nouvelle-dispo-{{ carte.id }}" required>
                             <option value="Deck:Starter">Deck:Starter</option>
                             <option value="dispo">Disponible</option>
