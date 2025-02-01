@@ -34,7 +34,7 @@ def create_table():
             saison TEXT NOT NULL CHECK(saison IN ('Shadepsire', 'Nightvault', 'Beastgrave', 'Direchasm', 'Starter set 2021', 'Harrowdeep', 'Nethermaze', 'Gnarlwood', 'Wyrdhollow', 'Starter set 2023', 'Deathgorge', 'Wintermaw')),
             alliance TEXT NOT NULL CHECK(alliance IN ('mort', 'chaos', 'destruction', 'ordre')),
             numero_serie TEXT NOT NULL UNIQUE,
-            disponibilite TEXT NOT NULL CHECK(disponibilite LIKE 'Deck' OR disponibilite IN ('dispo', 'non posséder'))
+            disponibilite TEXT NOT NULL
         )
     ''')
 
